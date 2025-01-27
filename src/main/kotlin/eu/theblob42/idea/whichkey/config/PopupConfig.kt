@@ -79,20 +79,25 @@ object PopupConfig {
          * the factor 0.65 was found by experimenting and comparing result lengths pixel by pixel
          * it might be erroneous and could change in the future
          */
-        val frameWidth = (ideFrame.width * 0.65).toInt()
-        // check for the longest string as this will most probably be the widest mapping
         val maxMapping = nestedMappings.maxByOrNull { (key, mapping) -> key.length + mapping.description.length }!! // (we have manually checked that 'nestedMappings' is not empty)
+        
+        // check for the longest string as this will most probably be the widest mapping
         // calculate the pixel width of the longest mapping string (with HTML formatting & styling)
         val maxStringWidth = JLabel("<html>${FormatConfig.formatMappingEntry(maxMapping)}</html>").preferredSize.width
-        val possibleColumns = (frameWidth / maxStringWidth).let {
-            when {
-                // ensure a minimum value of 1 to avoid dividing by zero
-                it < 1 -> 1
-                // always use the full available screen space
-                it > nestedMappings.size -> nestedMappings.size
-                else -> it
-            }
-        }
+        
+        val frameWidth = maxStringWidth + 40
+        val possibleColumns = 1
+
+//        val frameWidth = (ideFrame.width * 0.65).toInt()
+//        val possibleColumns = (frameWidth / maxStringWidth).let { // todo js
+//            when {
+//                // ensure a minimum value of 1 to avoid dividing by zero
+//                it < 1 -> 1
+//                // always use the full available screen space
+//                it > nestedMappings.size -> nestedMappings.size
+//                else -> it
+//            }
+//        }
         // use as much space for every column as possible
         val columnWidth = frameWidth / possibleColumns
 
@@ -127,7 +132,8 @@ object PopupConfig {
             mappingsStringBuilder.append(FormatConfig.formatTypedSequence(typedKeys))
         }
 
-        val target = RelativePoint.getSouthWestOf(ideFrame.rootPane)
+//        val target = RelativePoint.getSouthWestOf(ideFrame.rootPane)
+        val target = RelativePoint.getSouthEastOf(ideFrame.rootPane)
         val fadeoutTime = if (injector.globalOptions().timeout) {
             injector.globalOptions().timeoutlen.toLong()
         } else {
