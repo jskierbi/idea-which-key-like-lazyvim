@@ -31,7 +31,7 @@ tasks.withType<PatchPluginXmlTask> {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version.set("2023.3.3")
-    updateSinceUntilBuild.set(false)
+    version.set("2024.2")
+    updateSinceUntilBuild.set(true)
     plugins.set(listOf("IdeaVIM:2.10.0"))
 }
